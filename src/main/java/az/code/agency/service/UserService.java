@@ -78,7 +78,7 @@ public class UserService {
                 "Warmest regards,\n" +
                 "The " + companyName + " Team";
 
-        //TODO ngrok linkidi deyisecek
+         //TODO ngrok linkidi deyisecek
     }
 
     public ResponseEntity<Response> loginAgent(LoginRequest request) {
