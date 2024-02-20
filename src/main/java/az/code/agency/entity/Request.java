@@ -1,10 +1,8 @@
 package az.code.agency.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
@@ -29,5 +27,10 @@ public class Request {
     User user;
     @OneToMany(mappedBy = "request")
     List<Offer> offers;
+
+    @ManyToOne
+    @JsonIgnore
+    @ToString.Exclude
+    Archive archive;
 
 }
