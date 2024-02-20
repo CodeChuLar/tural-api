@@ -25,8 +25,9 @@ public class Request {
 
     @ManyToOne
     User user;
-    @OneToMany(mappedBy = "request")
-    List<Offer> offers;
+
+    @OneToOne(mappedBy = "request")
+    Offer offer;
 
     @ManyToOne
     @JsonIgnore

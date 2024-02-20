@@ -23,8 +23,7 @@ public class Offer {
     @JoinColumn(name = "agent_id")
     private Agent agent;
 
-    @ManyToOne
-    @JsonIgnore
-    @ToString.Exclude
-    Request request;
+
+    @OneToOne
+    private Request request;
 }

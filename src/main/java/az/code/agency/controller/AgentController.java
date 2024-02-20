@@ -14,10 +14,7 @@ public class AgentController {
         this.agentServiceImpl = agentServiceImpl;
     }
 
-    @PostMapping("/{agentId}/offer")
-    public void sendOffer(@PathVariable long agentId, @RequestBody Offer offer) {
-        agentServiceImpl.sendOffer(agentId, offer);
-    }
+
 
 
 }

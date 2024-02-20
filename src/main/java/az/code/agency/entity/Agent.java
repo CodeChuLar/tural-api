@@ -28,5 +28,8 @@ public class Agent {
     @OneToOne(mappedBy = "agent", cascade = CascadeType.ALL)
     private User user;
 
+    @OneToMany(mappedBy = "creator")
+    private List<Request> requests;
+
 
 }
