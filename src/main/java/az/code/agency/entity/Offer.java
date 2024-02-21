@@ -25,5 +25,6 @@ public class Offer {
 
 
     @OneToOne
-    private Request request;
+    @JoinColumn(name = "request_status_id")
+    RequestStatus requestStatus;
 }
