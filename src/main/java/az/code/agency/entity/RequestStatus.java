@@ -19,12 +19,20 @@ public class RequestStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String status;
+
+    String status; //archive, pending, answered
+
     LocalDateTime statusTime;
 
     @ManyToOne
-    User user;
+    @JoinColumn(name = "agent_id")
+    private Agent agent; //agent get elese statusuna esasen get elyer, UI da archive gonderme buttonu qoyaram basanda statusu archive olar duser basqa yere, o yerdede archivden cixarsa pending olar yene
+
 
     @ManyToOne
-    Request request;
+    @JoinColumn(name = "request_id")
+    private Request request;
+
+    @OneToOne(mappedBy = "requestStatus")
+    Offer offer; //offerde answered olna biler yada pending
 }

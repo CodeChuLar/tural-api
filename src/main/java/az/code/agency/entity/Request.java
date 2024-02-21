@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "requests")
@@ -19,19 +20,10 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
+    UUID SessionId; //heleki sessiani bele saxladiq deyek
     LocalDateTime creationTime;
     LocalDateTime deadline;
-    boolean expired;
 
-    @ManyToOne
-    User user;
-
-    @OneToOne(mappedBy = "request")
-    Offer offer;
-
-    @ManyToOne
-    @JsonIgnore
-    @ToString.Exclude
-    Archive archive;
-
+    @OneToMany(mappedBy = "request")
+    List<RequestStatus> requestStatuses;
 }
