@@ -20,7 +20,7 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
-    UUID SessionId; //heleki sessiani bele saxladiq deyek
+    UUID SessionId;
     LocalDateTime creationTime;
     LocalDateTime deadline;
 

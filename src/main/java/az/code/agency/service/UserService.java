@@ -1,5 +1,6 @@
 package az.code.agency.service;
 
+import az.code.agency.dto.request.ChangePasswordRequest;
 import az.code.agency.dto.request.LoginRequest;
 import az.code.agency.dto.request.RegisterRequest;
 import az.code.agency.dto.response.Response;
@@ -111,5 +112,15 @@ public class UserService {
 
     private String getConfirmationToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public ResponseEntity<Response> changePassword(ChangePasswordRequest request) {
+        User user = userRepository.findByUsername(request.getUsername());
+        if (user == null || !user.getPassword().equals(request.getCurrentPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Invalid credentials"));
+        }
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+        return ResponseEntity.ok(new Response("Password changed successfully"));
     }
 }

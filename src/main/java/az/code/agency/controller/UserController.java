@@ -1,5 +1,6 @@
 package az.code.agency.controller;
 
+import az.code.agency.dto.request.ChangePasswordRequest;
 import az.code.agency.dto.request.LoginRequest;
 import az.code.agency.dto.request.RegisterRequest;
 import az.code.agency.dto.response.Response;
@@ -31,6 +32,10 @@ public class UserController {
     @GetMapping("/confirmation")
     public ResponseEntity<?> confirmation(@RequestParam("confirmationToken") String confirmationToken) {
         return userService.confirmation(confirmationToken);
+    }
+    @PostMapping("/change-password")
+    public ResponseEntity<Response> changePassword(@RequestBody ChangePasswordRequest request) {
+        return userService.changePassword(request);
     }
 
 }
