@@ -31,6 +31,7 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/sessions/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/swagger-ui*/**", "/v3/api-docs/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/**").authenticated());
 

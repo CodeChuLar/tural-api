@@ -21,3 +21,13 @@ spring:
     secret: bXMxNG1zMTRtczE0bXMxNG1zMTRtczE0bXMxNG1zMTRtczE0bXMxNG1zMTRtczE0bXMxNG1zMTRtczE0bXMxNA==
     token:
       expirationTime: 60
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_HOST_NAME:localhost}:${KAFKA_PORT:9092}
+      properties:
+        group-id: telegram-bot
+    admin:
+      properties:
+        bootstrap.servers: ${KAFKA_HOST_NAME:localhost}:${KAFKA_PORT:9092}
+server:
+  port: 8081
