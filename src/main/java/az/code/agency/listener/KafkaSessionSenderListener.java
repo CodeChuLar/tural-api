@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -21,7 +23,6 @@ public class KafkaSessionSenderListener {
 
     private final SessionService service;
     private final ObjectMapper objectMapper;
-
 
     @KafkaListener(topics = {"session-front-topic"}, containerFactory = "kafkaListenerContainerFactory")
     public void processSessionAnswer(ConsumerRecord<String, String> record) {
@@ -37,11 +38,29 @@ public class KafkaSessionSenderListener {
     }
 
     private SessionRequestDTO mapSessionToRequestDTO(Session session) {
+        // Split the answers string into key-value pairs
+        String[] keyValuePairs = session.getAnswers().split(",");
+
+        // Create a map to store the answers
+        Map<String, String> answersMap = new HashMap<>();
+
+        // Iterate through the key-value pairs and add them to the map
+        for (String pair : keyValuePairs) {
+            String[] parts = pair.split(":");
+            if (parts.length == 2) {
+                // Remove extra quotes and trim spaces from keys and values
+                String key = parts[0].replaceAll("\"", "").trim();
+                String value = parts[1].replaceAll("\"", "").trim();
+                answersMap.put(key, value);
+            }
+        }
+
         return SessionRequestDTO.builder()
                 .client(session.getClient())
                 .active(session.isActive())
-                .answers(Arrays.asList(session.getAnswers().split(",")))
+                .answers(answersMap)
                 .build();
     }
+
 
 }

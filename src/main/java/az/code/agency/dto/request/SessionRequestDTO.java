@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -15,5 +16,5 @@ import java.util.List;
 public class SessionRequestDTO {
     private Client client;
     private boolean active;
-    private List<String> answers;
+    private Map<String,String> answers;
 }
