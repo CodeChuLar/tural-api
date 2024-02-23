@@ -1,6 +1,7 @@
 package az.code.agency.controller;
 
 import az.code.agency.dto.request.SessionRequestDTO;
+import az.code.agency.entity.Session;
 import az.code.agency.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class SessionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> getAll() {
-        return new ResponseEntity<>(sessionService.getAllAnswers(), HttpStatus.OK);
+    public ResponseEntity<List<SessionRequestDTO>> getAll() {
+        return new ResponseEntity<>(sessionService.getAll(), HttpStatus.OK);
     }
 }
