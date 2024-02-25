@@ -1,80 +1,58 @@
 package az.code.agency.service;
 
-import az.code.agency.dto.request.SessionRequestDTO;
+import az.code.agency.dto.ClientDTO;
+import az.code.agency.dto.SessionDTO;
+import az.code.agency.entity.Client;
 import az.code.agency.entity.Session;
 import az.code.agency.repository.SessionRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class SessionService {
 
-    private final SessionRepo sessionRepo;
-   private final ObjectMapper objectMapper;
+    private final SessionRepo sessionRepository;
+    private final ClientService clientService;
+    private final ObjectMapper objectMapper;
 
-    public void createSession(SessionRequestDTO requestDTO) {
+    public void saveSession(SessionDTO sessionDTO) throws JsonProcessingException {
+        // Convert ClientDTO to Client entity
+        ClientDTO clientDTO = sessionDTO.getClient();
+        Client client = clientService.convertToEntity(clientDTO);
+
+        // Clean up and parse answers
+        Map<String, String> cleanedAnswers = parseAnswers(sessionDTO.getAnswers());
+
+        // Create Session entity
         Session session = Session.builder()
-                .client(requestDTO.getClient())
-                .active(requestDTO.isActive())
-                .registeredAt(LocalDateTime.now())
-                .answers(convertAnswersToJson(requestDTO.getAnswers())) // Convert answers to JSON
+                .client(client)
+                .active(sessionDTO.isActive())
+                .registeredAt(sessionDTO.getRegisteredAt())
+                .answers(cleanedAnswers) // Store cleaned answers
                 .build();
 
-        sessionRepo.save(session);
-        log.info("Session created: {}", session);
+        // Save the session
+        sessionRepository.save(session);
     }
 
-    private String convertAnswersToJson(Map<String, String> answers) {
-        try {
-            return new ObjectMapper().writeValueAsString(answers);
-        } catch (JsonProcessingException e) {
-            log.error("Error converting answers to JSON: {}", e.getMessage());
-            return null;
-        }
+    private Map<String, String> parseAnswers(String answers) throws JsonProcessingException {
+        // Convert the answers JSON string to a Map<String, String>
+        return objectMapper.readValue(answers, new TypeReference<Map<String,String>>(){});
     }
 
 
-    //    public List<String> getAllAnswers() {
-//        List<Session> sessions = sessionRepo.findAll();
-//        return sessions.stream()
-//                .map(Session::getAnswers)
-//                .collect(Collectors.toList());
-//    }
-
-
-    public List<SessionRequestDTO> getAll() {
-        List<Session> sessions = sessionRepo.findAll();
-        return sessions.stream()
-                .map(this::mapToSessionRequestDTO)
-                .collect(Collectors.toList());
+    public List<Session> getAllSessions() {
+        return sessionRepository.findAll();
     }
 
-    private SessionRequestDTO mapToSessionRequestDTO(Session session) {
-        SessionRequestDTO sessionRequestDTO = new SessionRequestDTO();
-        sessionRequestDTO.setClient(session.getClient());
-        sessionRequestDTO.setActive(session.isActive());
-
-        try {
-            Map<String, String> answersMap = objectMapper.readValue(session.getAnswers(), new TypeReference<Map<String, String>>(){});
-            sessionRequestDTO.setAnswers(answersMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-            sessionRequestDTO.setAnswers(Collections.emptyMap());
-        }
-
-        return sessionRequestDTO;
-    }
 }
