@@ -13,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "clients")
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long clientId;
     long chatId;
     String fullName;

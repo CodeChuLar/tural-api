@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -25,10 +26,9 @@ public class Session {
     boolean active;
     LocalDateTime registeredAt;
 
-    @JsonProperty("answers")
-    private String answers;
+    @Column(columnDefinition = "jsonb") // Map to a JSON column type in the database
+    @Convert(converter = MapToJsonConverter.class) // Custom converter to handle Map to JSON conversion
+    private Map<String, String> answers;
 
-    public Session(String answers) {
-        this.answers = answers;
-    }
+
 }
