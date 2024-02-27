@@ -15,8 +15,6 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    @ManyToOne
-    Client client;
     String price;
     String dateRange;
     String additionalInfo;

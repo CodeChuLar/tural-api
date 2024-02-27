@@ -16,8 +16,4 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-    @PostMapping("/{agentId}/send/{sessionId}")
-    public Offer sendOffer(@PathVariable Long agentId, @RequestBody Offer offer, @PathVariable long sessionId) {
-        return offerService.sendOfferToAgent(agentId, offer, sessionId);
-    }
 }

@@ -19,7 +19,4 @@ public class Client {
     long chatId;
     String fullName;
     String phoneNumber;
-
-    @OneToMany(mappedBy = "client")
-    private List<Session> sessionList;
 }

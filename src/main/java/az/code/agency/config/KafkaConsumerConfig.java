@@ -38,14 +38,14 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Session> sessionConsumerFactory() {
+    public ConsumerFactory<String, Object> sessionConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(),
-                new JsonDeserializer<>(Session.class));
+                new JsonDeserializer<>(Object.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Session> sessionKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Session> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, Object> sessionKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(sessionConsumerFactory());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
