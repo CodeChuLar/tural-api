@@ -29,7 +29,7 @@ public class Agent {
     private User user;
 
     @OneToMany(mappedBy = "agent")
-    private List<RequestStatus> requestStatuses;
+    private List<SessionStatus> sessionStatuses;
 
 
 }

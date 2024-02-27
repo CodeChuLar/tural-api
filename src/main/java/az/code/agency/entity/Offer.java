@@ -15,7 +15,8 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-
+    @ManyToOne
+    Client client;
     String price;
     String dateRange;
     String additionalInfo;
@@ -23,8 +24,6 @@ public class Offer {
     @JoinColumn(name = "agent_id")
     private Agent agent;
 
-
-    @OneToOne
-    @JoinColumn(name = "request_status_id")
-    RequestStatus requestStatus;
+    @OneToOne(mappedBy = "offer", cascade = CascadeType.ALL)
+    private Session session;
 }
