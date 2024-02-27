@@ -24,6 +24,8 @@ public class Offer {
     @JoinColumn(name = "agent_id")
     private Agent agent;
 
-    @OneToOne(mappedBy = "offer", cascade = CascadeType.ALL)
-    private Session session;
+    @JoinColumn(name = "request_status_id")
+    @OneToOne
+    RequestStatus requestStatus;
+
 }
