@@ -22,13 +22,18 @@ public class Session {
     UUID id;
 
     @ManyToOne
+    @JoinColumn(name = "client_id")
     Client client;
     boolean active;
+    @Enumerated(EnumType.STRING)
+    SessionStatus status;
     LocalDateTime registeredAt;
 
-    @Column(columnDefinition = "jsonb") // Map to a JSON column type in the database
-    @Convert(converter = MapToJsonConverter.class) // Custom converter to handle Map to JSON conversion
+    @Column(columnDefinition = "jsonb")
+    @Convert(converter = MapToJsonConverter.class)
     private Map<String, String> answers;
 
-
+    @OneToOne
+    @JoinColumn(name = "offer_id")
+    private Offer offer;
 }

@@ -2,6 +2,7 @@ package az.code.agency.controller;
 
 import az.code.agency.entity.Agent;
 import az.code.agency.entity.Offer;
+import az.code.agency.service.AgentServiceImpl;
 import az.code.agency.service.OfferServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,5 +16,8 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-
+    @PostMapping("/{agentId}/send/{sessionId}")
+    public Offer sendOffer(@PathVariable Long agentId, @RequestBody Offer offer, @PathVariable long sessionId) {
+        return offerService.sendOfferToAgent(agentId, offer, sessionId);
+    }
 }
