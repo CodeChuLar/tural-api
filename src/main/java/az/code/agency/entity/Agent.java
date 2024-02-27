@@ -28,8 +28,8 @@ public class Agent {
     @OneToOne(mappedBy = "agent", cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany(mappedBy = "agent")
-    private List<SessionStatus> sessionStatuses;
+    @Enumerated(EnumType.STRING)
+    private SessionStatus sessionStatuses;
 
 
 }

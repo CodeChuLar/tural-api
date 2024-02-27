@@ -1,5 +1,6 @@
 package az.code.agency.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,10 +24,15 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @ToString.Exclude
+    @JsonIgnore
     Client client;
+
     boolean active;
+
     @Enumerated(EnumType.STRING)
     SessionStatus status;
+
     LocalDateTime registeredAt;
 
     @Column(columnDefinition = "jsonb")
