@@ -28,8 +28,4 @@ public class Agent {
     @OneToOne(mappedBy = "agent", cascade = CascadeType.ALL)
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private SessionStatus sessionStatuses;
-
-
 }
