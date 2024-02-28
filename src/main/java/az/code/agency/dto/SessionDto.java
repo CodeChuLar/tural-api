@@ -18,4 +18,5 @@ public class SessionDto {
     private String phoneNumber;
     @JsonProperty("answers")
     private String answers;
+    boolean active;
 }

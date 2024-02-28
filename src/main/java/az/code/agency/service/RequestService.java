@@ -4,22 +4,15 @@ import az.code.agency.dto.ClientDto;
 import az.code.agency.dto.SessionDto;
 import az.code.agency.entity.Request;
 import az.code.agency.repository.RequestRepository;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +27,7 @@ public class RequestService {
     public void saveSessionToRequest(SessionDto sessionDto) {
         request.setSessionId(sessionDto.getSessionId());
         request.setCreationTime(LocalDateTime.now());
+        request.setActive(sessionDto.isActive());
 
         try {
             String answersJson = sessionDto.getAnswers();
@@ -57,5 +51,9 @@ public class RequestService {
 
     public List<Request> getAllRequests() {
         return requestRepository.findAll();
+    }
+
+    public Optional<Request> findById(Long id) {
+        return requestRepository.findById(id);
     }
 }

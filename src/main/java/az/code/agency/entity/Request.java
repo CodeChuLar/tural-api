@@ -27,6 +27,7 @@ public class Request {
     LocalDateTime deadline;
     String fullName;
     String phoneNumber;
+    boolean active;
 
     @JsonProperty("answers")
     @Convert(converter = StringToJsonConverter.class)
