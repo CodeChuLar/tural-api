@@ -41,6 +41,18 @@ public class GlobalExceptionHandler {
                 .build());
     }
 
+    @ExceptionHandler(RequestNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleRequestNotFoundException(RequestNotFoundException ex,
+                                                                         WebRequest req) {
+        ex.printStackTrace();
+
+        return ResponseEntity.status(400).body(ErrorResponseDto.builder()
+                .status(400)
+                .title("Exception")
+                .details("Request not found")
+                .build());
+    }
+
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidPasswordException(InvalidPasswordException ex,
                                                                            WebRequest req) {

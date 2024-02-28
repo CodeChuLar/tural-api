@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +19,12 @@ public class Offer {
     String price;
     String dateRange;
     String additionalInfo;
+
     @ManyToOne
     @JoinColumn(name = "agent_id")
+    @JsonIgnore
+    @ToString.Exclude
     private Agent agent;
 
-    @JoinColumn(name = "request_status_id")
-    @OneToOne
-    RequestStatus requestStatus;
 
 }
