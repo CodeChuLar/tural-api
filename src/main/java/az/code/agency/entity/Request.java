@@ -1,5 +1,6 @@
 package az.code.agency.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,14 +23,16 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
-    UUID sessionId; //heleki sessiani bele saxladiq deyek
+    UUID sessionId;
     LocalDateTime creationTime;
     LocalDateTime deadline;
+    String fullName;
+    String phoneNumber;
 
-    @Column(columnDefinition = "jsonb")
-    @Convert(converter = MapToJsonConverter.class)
-    private Map<String, String> answers;
+    @JsonProperty("answers")
+    @Convert(converter = StringToJsonConverter.class)
+    private Map<String, Object> answers;
 
-    @OneToMany(mappedBy = "request")
-    List<RequestStatus> requestStatuses;
+    @Enumerated(EnumType.STRING)
+    RequestStatus status;
 }

@@ -1,5 +1,6 @@
 package az.code.agency.listener;
 
+import az.code.agency.dto.ClientDto;
 import az.code.agency.dto.SessionDto;
 import az.code.agency.service.RequestService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,18 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class SessionKafkaListener {
+public class ClientKafkaListener {
 
     private final ObjectMapper objectMapper;
     private final RequestService requestService;
 
-    @KafkaListener(topics = "session-new-topic", groupId = "telegram-bot")
+    @KafkaListener(topics = "client-new-topic", groupId = "telegram-bot")
     public void listen(ConsumerRecord<String, String> record) {
-        log.info("Session Received {}", record.value());
+        log.info("Client Received {}", record.value());
 
         try {
-            SessionDto sessionDto = objectMapper.readValue(record.value(), SessionDto.class);
-            requestService.saveSessionToRequest(sessionDto);
+            ClientDto clientDto = objectMapper.readValue(record.value(), ClientDto.class);
+            requestService.saveClientToRequest(clientDto);
         } catch (JsonProcessingException e) {
             log.error("Error deserializing JSON: {}", e.getMessage());
         }
