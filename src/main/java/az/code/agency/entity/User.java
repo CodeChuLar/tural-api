@@ -26,7 +26,6 @@ public class User {
 
     private boolean confirmed;
 
-
     @OneToOne
     @JoinColumn(name = "agent_id")
     private Agent agent;

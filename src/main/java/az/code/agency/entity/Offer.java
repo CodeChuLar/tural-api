@@ -28,8 +28,10 @@ public class Offer {
     @ToString.Exclude
     private Agent agent;
 
-    @OneToMany(mappedBy = "offer")
-    private List<Request> requests;
+    @ManyToOne
+    @JsonIgnore
+    @ToString.Exclude
+    Request request;
 
 
 }

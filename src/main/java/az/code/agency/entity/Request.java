@@ -32,8 +32,6 @@ public class Request {
     @Convert(converter = StringToJsonConverter.class)
     private Map<String, Object> answers;
 
-    @ManyToOne
-    @JsonIgnore
-    @ToString.Exclude
-    Offer offer;
+    @OneToMany(mappedBy = "request")
+    private List<Offer> offers;
 }

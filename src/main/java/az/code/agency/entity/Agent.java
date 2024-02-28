@@ -22,8 +22,8 @@ public class Agent {
     String agentName;
     String companyName;
 
-    @OneToMany(mappedBy = "agent")
-    private List<Offer> offers;
+//    @OneToMany(mappedBy = "agent")
+//    private List<Offer> offers;
 
     @OneToOne(mappedBy = "agent", cascade = CascadeType.ALL)
     private User user;
