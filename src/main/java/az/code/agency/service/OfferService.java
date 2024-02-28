@@ -41,10 +41,10 @@ public class OfferService {
     public void createOffer(UUID sessionId, Long agentId, OfferRequest offerRequest) {
         LocalDateTime currentTime = LocalDateTime.now();
 
-//        if (!isWorkingHours(currentTime)) {
-//            log.warn("Offer cannot be sent outside working hours.");
-//            return;
-//        }
+        if (!isWorkingHours(currentTime)) {
+            log.warn("Offer cannot be sent outside working hours.");
+            return;
+        }
 
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new AgentNotFoundException(ErrorCodes.AGENT_NOT_FOUND));
