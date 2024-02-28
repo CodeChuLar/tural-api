@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Table(name = "offers")
 @Data
@@ -25,6 +27,9 @@ public class Offer {
     @JsonIgnore
     @ToString.Exclude
     private Agent agent;
+
+    @OneToMany(mappedBy = "offer")
+    private List<Request> requests;
 
 
 }
