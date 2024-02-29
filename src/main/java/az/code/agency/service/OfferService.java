@@ -45,9 +45,9 @@ public class OfferService {
     public OfferResponse createOffer(Long requestId, Long agentId, OfferRequest offerRequest) {
         LocalDateTime currentTime = LocalDateTime.now();
 
-//        if (!isWorkingHours(currentTime)) {
-//            throw  new IllegalStateException("Now is not working time.");
-//        }
+        if (!isWorkingHours(currentTime)) {
+            throw  new IllegalStateException("Now is not working time.");
+        }
 
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new AgentNotFoundException(ErrorCodes.AGENT_NOT_FOUND));
@@ -125,6 +125,11 @@ public class OfferService {
 
     private boolean isWorkingHours(LocalDateTime currentTime) {
         return !currentTime.isBefore(WORK_START_TIME) && !currentTime.isAfter(WORK_END_TIME);
+    }
+
+
+    protected LocalDateTime getCurrentTime() {
+        return LocalDateTime.now();
     }
 
     public List<Offer> getAll() {
