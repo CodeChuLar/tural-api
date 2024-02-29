@@ -21,6 +21,7 @@ public class AgentRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Enumerated(EnumType.STRING)
     Status status;
 
     LocalDateTime statusTime;

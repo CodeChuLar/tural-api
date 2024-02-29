@@ -3,9 +3,10 @@ package az.code.agency.service;
 import az.code.agency.dto.ClientDto;
 import az.code.agency.dto.SessionDto;
 import az.code.agency.dto.request.OfferRequest;
-import az.code.agency.entity.Agent;
-import az.code.agency.entity.Offer;
-import az.code.agency.entity.Request;
+import az.code.agency.dto.response.AgentResponse;
+import az.code.agency.dto.response.OfferResponse;
+import az.code.agency.dto.response.RequestResponse;
+import az.code.agency.entity.*;
 import az.code.agency.exception.AgentNotFoundException;
 import az.code.agency.exception.ErrorCodes;
 import az.code.agency.exception.RequestNotFoundException;
@@ -41,13 +42,12 @@ public class OfferService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
 
-    public void createOffer(Long requestId, Long agentId, OfferRequest offerRequest) {
+    public OfferResponse createOffer(Long requestId, Long agentId, OfferRequest offerRequest) {
         LocalDateTime currentTime = LocalDateTime.now();
 
-        if (!isWorkingHours(currentTime)) {
-            log.warn("Offer cannot be sent outside working hours.");
-            return;
-        }
+//        if (!isWorkingHours(currentTime)) {
+//            throw  new IllegalStateException("Now is not working time.");
+//        }
 
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new AgentNotFoundException(ErrorCodes.AGENT_NOT_FOUND));
@@ -55,24 +55,63 @@ public class OfferService {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new RequestNotFoundException(ErrorCodes.REQUEST_NOT_FOUND));
 
-        if (request.isActive()) {
-            Offer offer = Offer.builder()
-                    .price(offerRequest.getPrice())
-                    .dateRange(offerRequest.getDateRange())
-                    .additionalInfo(offerRequest.getAdditionalInfo())
-                    .agent(agent)
-                    .request(request)
-                    .build();
+        AgentRequest agentRequest = agentRequestRepository.findByRequest(request);
 
-            offerRepository.save(offer);
-            log.info("Offer created successfully for client {}.", request.getFullName());
 
-            sendOffer(offer);
-        } else {
+        if (agentRequest == null) {
+            agentRequest = new AgentRequest();
+            agentRequest.setStatus(Status.PENDING);
+            agentRequest.setRequest(request);
+            agentRequest.setAgent(agent);
+            agentRequestRepository.save(agentRequest);
+        } else if (agentRequest.getStatus() != Status.PENDING) {
+            throw new IllegalStateException("Cannot create offer for a request with status other than PENDING.");
+
+        }
+
+        if (!request.isActive()) {
             throw new IllegalStateException("Cannot create offer for an expired request.");
         }
 
+        Offer offer = Offer.builder()
+                .price(offerRequest.getPrice())
+                .dateRange(offerRequest.getDateRange())
+                .additionalInfo(offerRequest.getAdditionalInfo())
+                .agent(agent)
+                .request(request)
+                .build();
+
+        offerRepository.save(offer);
+        log.info("Offer created successfully for client {}.", request.getFullName());
+
+        sendOffer(offer);
+
+        // Populate OfferResponse with AgentResponse and RequestResponse
+        OfferResponse offerResponse = new OfferResponse();
+        offerResponse.setId(offer.getId());
+        offerResponse.setPrice(offer.getPrice());
+        offerResponse.setDateRange(offer.getDateRange());
+        offerResponse.setAdditionalInfo(offer.getAdditionalInfo());
+
+        AgentResponse agentResponse = new AgentResponse();
+        agentResponse.setVoen(agent.getVoen());
+        agentResponse.setAgentName(agent.getAgentName());
+        agentResponse.setCompanyName(agent.getCompanyName());
+        offerResponse.setAgent(agentResponse);
+
+        RequestResponse requestResponse = new RequestResponse();
+        requestResponse.setId(request.getId());
+        requestResponse.setTitle(request.getTitle());
+        requestResponse.setCreationTime(request.getCreationTime());
+        requestResponse.setDeadline(request.getDeadline());
+        requestResponse.setFullName(request.getFullName());
+        requestResponse.setPhoneNumber(request.getPhoneNumber());
+        requestResponse.setActive(request.isActive());
+        offerResponse.setRequest(requestResponse);
+
+        return offerResponse;
     }
+
 
     private void sendOffer(Offer offer) {
         try {
