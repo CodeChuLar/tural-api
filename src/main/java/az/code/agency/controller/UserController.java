@@ -3,6 +3,7 @@ package az.code.agency.controller;
 import az.code.agency.dto.request.ChangePasswordRequest;
 import az.code.agency.dto.request.LoginRequest;
 import az.code.agency.dto.request.RegisterRequest;
+import az.code.agency.dto.response.LoginResponseDTO;
 import az.code.agency.dto.response.Response;
 import az.code.agency.entity.Offer;
 import az.code.agency.service.AgentServiceImpl;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response> loginAgent(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponseDTO> loginAgent(@RequestBody LoginRequest loginRequest) {
         return userService.loginAgent(loginRequest);
     }
 

@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AgentRequestRepository extends JpaRepository<AgentRequest, Long> {
 
     AgentRequest findByRequest(Request request);
+
+    AgentRequest findByRequestId(Long requestId);
 }

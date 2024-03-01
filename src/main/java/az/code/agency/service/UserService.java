@@ -3,6 +3,7 @@ package az.code.agency.service;
 import az.code.agency.dto.request.ChangePasswordRequest;
 import az.code.agency.dto.request.LoginRequest;
 import az.code.agency.dto.request.RegisterRequest;
+import az.code.agency.dto.response.LoginResponseDTO;
 import az.code.agency.dto.response.Response;
 import az.code.agency.entity.Agent;
 import az.code.agency.entity.User;
@@ -82,7 +83,7 @@ public class UserService {
          //TODO ngrok linkidi deyisecek
     }
 
-    public ResponseEntity<Response> loginAgent(LoginRequest request) {
+    public ResponseEntity<LoginResponseDTO> loginAgent(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AgentNotFoundException(ErrorCodes.AGENT_NOT_FOUND));
 
@@ -90,11 +91,13 @@ public class UserService {
             throw new InvalidPasswordException(ErrorCodes.INVALID_PASSWORD);
         }
 
-        return ResponseEntity.ok(Response
-                .builder()
+        // Return JWT token and Agent ID in the response
+        return ResponseEntity.ok(LoginResponseDTO.builder()
                 .jwt(jwtService.issueToken(user))
+                .agentId(user.getAgent().getId())
                 .build());
     }
+
 
 
     public ResponseEntity<?> confirmation(String confirmationToken) {
