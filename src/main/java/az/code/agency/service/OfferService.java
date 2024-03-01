@@ -1,6 +1,7 @@
 package az.code.agency.service;
 
 import az.code.agency.dto.ClientDto;
+import az.code.agency.dto.OfferDto;
 import az.code.agency.dto.SessionDto;
 import az.code.agency.dto.request.OfferRequest;
 import az.code.agency.dto.response.AgentResponse;
@@ -45,9 +46,9 @@ public class OfferService {
     public OfferResponse createOffer(Long requestId, Long agentId, OfferRequest offerRequest) {
         LocalDateTime currentTime = LocalDateTime.now();
 
-//        if (!isWorkingHours(currentTime)) {
-//            throw  new IllegalStateException("Now is not working time.");
-//        }
+        if (!isWorkingHours(currentTime)) {
+            throw new IllegalStateException("Now is not working time.");
+        }
 
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new AgentNotFoundException(ErrorCodes.AGENT_NOT_FOUND));
@@ -115,11 +116,21 @@ public class OfferService {
 
     private void sendOffer(Offer offer) {
         try {
-            kafkaTemplate.send("offer-topic", offer);
+            OfferDto offerDto = convertToDto(offer);
+            kafkaTemplate.send("offer-topic", offerDto);
             log.info("Offer sent successfully to another application.");
         } catch (Exception e) {
             log.error("Error sending offer to another application: {}", e.getMessage());
         }
+    }
+
+    private OfferDto convertToDto(Offer offer) {
+        return OfferDto.builder()
+                .sessionId(offer.getRequest().getSessionId())
+                .price(offer.getPrice())
+                .dateRange(offer.getDateRange())
+                .additionalInfo(offer.getAdditionalInfo())
+                .build();
     }
 
 
