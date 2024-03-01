@@ -1,5 +1,5 @@
 package az.code.agency.entity;
 
 public enum Status {
-    PENDING,ANSWERED, ARCHIVED
+    PENDING, ACCEPTED, ARCHIVED, OFFERED
 }

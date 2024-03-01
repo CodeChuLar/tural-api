@@ -61,13 +61,12 @@ public class OfferService {
 
         if (agentRequest == null) {
             agentRequest = new AgentRequest();
-            agentRequest.setStatus(Status.PENDING);
+            agentRequest.setStatus(Status.OFFERED);
             agentRequest.setRequest(request);
             agentRequest.setAgent(agent);
             agentRequestRepository.save(agentRequest);
         } else if (agentRequest.getStatus() != Status.PENDING) {
-            throw new IllegalStateException("Cannot create offer for a request with status other than PENDING.");
-
+            log.error("Cannot create offer for a request as it can be offered or achieved.");
         }
 
         if (!request.isActive()) {
