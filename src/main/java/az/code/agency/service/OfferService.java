@@ -46,9 +46,9 @@ public class OfferService {
     public OfferResponse createOffer(Long requestId, Long agentId, OfferRequest offerRequest) {
         LocalDateTime currentTime = LocalDateTime.now();
 
-        if (!isWorkingHours(currentTime)) {
-            throw new IllegalStateException("Now is not working time.");
-        }
+//        if (!isWorkingHours(currentTime)) {
+//            throw new IllegalStateException("Now is not working time.");
+//        }
 
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new AgentNotFoundException(ErrorCodes.AGENT_NOT_FOUND));
@@ -125,6 +125,7 @@ public class OfferService {
 
     private OfferDto convertToDto(Offer offer) {
         return OfferDto.builder()
+                .id(offer.getId())
                 .sessionId(offer.getRequest().getSessionId())
                 .price(offer.getPrice())
                 .dateRange(offer.getDateRange())
