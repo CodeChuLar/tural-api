@@ -14,8 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SessionDto {
     private UUID sessionId;
-    private String fullName;
-    private String phoneNumber;
+    private ClientDto client;
     @JsonProperty("answers")
     private String answers;
     boolean active;

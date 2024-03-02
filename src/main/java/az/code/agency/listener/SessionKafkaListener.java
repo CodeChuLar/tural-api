@@ -1,9 +1,11 @@
 package az.code.agency.listener;
 
+import az.code.agency.dto.ClientDto;
 import az.code.agency.dto.SessionDto;
 import az.code.agency.service.RequestService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,6 +19,7 @@ public class SessionKafkaListener {
 
     private final ObjectMapper objectMapper;
     private final RequestService requestService;
+
 
     @KafkaListener(topics = "session-new-topic", groupId = "telegram-bot")
     public void listen(ConsumerRecord<String, String> record) {

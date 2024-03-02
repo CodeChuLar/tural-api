@@ -21,13 +21,22 @@ public class RequestService {
 
     private final RequestRepository requestRepository;
     private final ObjectMapper objectMapper;
-    Request request = new Request();
 
+
+    @Transactional
     public void saveSessionToRequest(SessionDto sessionDto) {
-
+        Request request = new Request();
         request.setSessionId(sessionDto.getSessionId());
         request.setCreationTime(LocalDateTime.now());
         request.setActive(sessionDto.isActive());
+
+        ClientDto clientDto = sessionDto.getClient();
+        if (clientDto != null) {
+            request.setFullName(clientDto.getFullName());
+            request.setPhoneNumber(clientDto.getPhoneNumber());
+        } else {
+            log.error("Client information not found in SessionDto");
+        }
 
         try {
             String answersJson = sessionDto.getAnswers();
@@ -41,13 +50,6 @@ public class RequestService {
         requestRepository.save(request);
     }
 
-    public void saveClientToRequest(ClientDto clientDto) {
-        request.setFullName(clientDto.getFullName());
-        request.setPhoneNumber(clientDto.getPhoneNumber());
-
-        requestRepository.save(request);
-    }
-
     public List<Request> getAllRequests() {
         return requestRepository.findAll();
     }
@@ -56,3 +58,4 @@ public class RequestService {
         return requestRepository.findById(id);
     }
 }
+
