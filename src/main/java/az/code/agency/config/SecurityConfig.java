@@ -33,6 +33,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/requests/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/agent-requests/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/archives/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/offers/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/swagger-ui*/**", "/v3/api-docs/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/**").authenticated());
