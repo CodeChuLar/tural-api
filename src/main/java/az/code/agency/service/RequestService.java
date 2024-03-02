@@ -21,9 +21,10 @@ public class RequestService {
 
     private final RequestRepository requestRepository;
     private final ObjectMapper objectMapper;
+    Request request = new Request();
 
     public void saveSessionToRequest(SessionDto sessionDto) {
-        Request request = new Request();
+
         request.setSessionId(sessionDto.getSessionId());
         request.setCreationTime(LocalDateTime.now());
         request.setActive(sessionDto.isActive());
@@ -41,7 +42,6 @@ public class RequestService {
     }
 
     public void saveClientToRequest(ClientDto clientDto) {
-        Request request = new Request();
         request.setFullName(clientDto.getFullName());
         request.setPhoneNumber(clientDto.getPhoneNumber());
 
