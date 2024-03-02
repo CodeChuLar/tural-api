@@ -125,7 +125,7 @@ public class OfferService {
 
     private OfferDto convertToDto(Offer offer) {
         return OfferDto.builder()
-                .id(offer.getId())
+                .offerId(offer.getId())
                 .sessionId(offer.getRequest().getSessionId())
                 .price(offer.getPrice())
                 .dateRange(offer.getDateRange())
@@ -140,5 +140,10 @@ public class OfferService {
 
     public List<Offer> getAll() {
         return offerRepository.findAll();
+    }
+
+
+    public Offer findById(long id) {
+        return offerRepository.findById(id).orElse(null);
     }
 }
