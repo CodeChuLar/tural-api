@@ -13,4 +13,5 @@ public class OfferDto {
     private String price;
     private String dateRange;
     private String additionalInfo;
+    private String companyName;
 }

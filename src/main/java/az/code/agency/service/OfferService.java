@@ -130,6 +130,7 @@ public class OfferService {
                 .price(offer.getPrice())
                 .dateRange(offer.getDateRange())
                 .additionalInfo(offer.getAdditionalInfo())
+                .companyName(offer.getAgent().getCompanyName())
                 .build();
     }
 
